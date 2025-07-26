@@ -1,26 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Grade Calculator</title>
+  <meta charset="UTF-8">
+  <title>Student Grade Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      width: 350px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    input[type=number] {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f1f1f1;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Simple Grade Calculator</h1>
-  <input type="number" id="marks" placeholder="Enter your marks (0-100)">
-  <button onclick="calculateGrade()">Calculate Grade</button>
-  <p id="result"></p>
+  <div class="container">
+    <h2>Student Grade Calculator</h2>
+    <form id="gradeForm">
+      <input type="number" placeholder="Subject 1 Marks" required>
+      <input type="number" placeholder="Subject 2 Marks" required>
+      <input type="number" placeholder="Subject 3 Marks" required>
+      <input type="number" placeholder="Subject 4 Marks" required>
+      <input type="number" placeholder="Subject 5 Marks" required>
+      <button type="submit">Calculate Grade</button>
+    </form>
+    <div class="result" id="resultBox" style="display:none;"></div>
+  </div>
 
   <script>
-    function calculateGrade() {
-      var marks = document.getElementById("marks").value;
-      var grade = "";
-      if (marks >= 90) grade = "A+";
-      else if (marks >= 80) grade = "A";
-      else if (marks >= 70) grade = "B";
-      else if (marks >= 60) grade = "C";
-      else if (marks >= 50) grade = "D";
-      else grade = "F";
-      document.getElementById("result").innerText = "Your Grade is: " + grade;
-    }
+    document.getElementById("gradeForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const inputs = document.querySelectorAll("input[type='number']");
+      let total = 0;
+      let valid = true;
+
+      inputs.forEach(input => {
+        const val = parseInt(input.value);
+        if (isNaN(val) || val < 0 || val > 100) {
+          valid = false;
+        } else {
+          total += val;
+        }
+      });
+
+      if (!valid) {
+        alert("Please enter valid marks between 0 and 100.");
+        return;
+      }
+
+      const percent = total / 5;
+      let grade = '';
+      if (percent >= 90) grade = 'A+';
+      else if (percent >= 80) grade = 'A';
+      else if (percent >= 70) grade = 'B';
+      else if (percent >= 60) grade = 'C';
+      else if (percent >= 40) grade = 'D';
+      else grade = 'F';
+
+      const resultText = `
+        <strong>Total Marks:</strong> ${total}/500<br>
+        <strong>Percentage:</strong> ${percent.toFixed(2)}%<br>
+        <strong>Grade:</strong> ${grade}<br>
+        <strong>Result:</strong> ${percent >= 40 ? 'Pass ✅' : 'Fail ❌'}
+      `;
+      const resultBox = document.getElementById("resultBox");
+      resultBox.innerHTML = resultText;
+      resultBox.style.display = 'block';
+    });
   </script>
 </body>
 </html>
